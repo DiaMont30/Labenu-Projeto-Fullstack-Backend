@@ -2,7 +2,7 @@ import { CustomError } from "./CustomError";
 
 export class CheckData {
   public checkArray = (array: any, message: string) => {
-    if (array.length !== 0) {
+    if (array.length === 0) {
       throw new CustomError(401, message);
     }
   };
@@ -19,7 +19,7 @@ export class CheckData {
 
   public checkExistenceProperty = (reqPropety: any, propretyName: string) => {
     if (!reqPropety || reqPropety === undefined) {
-      throw new CustomError(406, `'${propretyName}' not found`);
+      throw new CustomError(406, `'${propretyName}' property is missing`);
     }
   };
 
@@ -34,7 +34,7 @@ export class CheckData {
     if (password.length < 6) {
       throw new CustomError(
         406,
-        " is password required whith minimum 6 caracteres"
+        "Password required whith minimum 6 caracteres"
       );
     }
   };

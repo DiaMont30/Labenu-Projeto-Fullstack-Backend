@@ -23,6 +23,7 @@ export class UserBusiness {
          const check = new CheckData();
 
          check.checkExistenceProperty(user.name, "name");
+         check.checkExistenceProperty(user.nickname, "nickname");
          check.checkPasswordFormat(user.password);
          check.checkEmailFormat(user.email);
 
@@ -33,7 +34,7 @@ export class UserBusiness {
             email: user.email,
             password: hashPassword,
          }
-         await this.userDatabase.createUser(newUser)
+         await this.userDatabase.insertUser(newUser)
 
          const accessToken = this.authenticator.generateToken({
             id

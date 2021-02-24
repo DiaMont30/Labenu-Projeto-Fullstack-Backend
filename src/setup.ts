@@ -35,6 +35,8 @@ class Setup extends BaseDatabase {
       console.log("Setup completed!");
     } catch (error) {
       console.log(error);
+    }finally{
+      await BaseDatabase.connection.destroy()
     }
   }
 }

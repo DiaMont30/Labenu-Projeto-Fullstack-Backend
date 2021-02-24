@@ -4,7 +4,7 @@ export class Image {
   constructor(
     public readonly id: string,
     public readonly subtitle: string,
-    public readonly date: Date,
+    public readonly date: string,
     public readonly file: string,
     public readonly tags: string,
     public readonly collection: string
@@ -14,7 +14,7 @@ export class Image {
 export interface ImageDB {
   id: string;
   subtitle: string;
-  date: Date;
+  date: string;
   file: string;
   tags: string;
   collection: string;
@@ -22,9 +22,13 @@ export interface ImageDB {
 
 export interface ImageInputDTO {
   subtitle: string;
-  date: Date;
   file: string;
   tags: string;
   collection: string;
+  token: string;
+}
+
+export interface GetImgInputDTO {
+  id: string;
   token: string;
 }

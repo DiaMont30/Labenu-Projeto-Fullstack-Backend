@@ -23,7 +23,6 @@ export class UserController {
         password: req.body.password,
       };
 
-      console.log("entrei controller")
       const token = await userBusiness.createUser(input);
 
       res.status(200).send({ token });

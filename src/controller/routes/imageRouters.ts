@@ -1,10 +1,11 @@
-// import express from "express";
-// import { UserController } from "../UserController";
+import express from "express";
+import { ImageController } from "../ImageController";
 
 
-// export const userRouter = express.Router()
+export const imageRouter = express.Router()
 
-// const userController = new UserController()
+const imageController = new ImageController()
 
-// userRouter.post("/signup", userController.signup)
-// userRouter.post("/login", userController.login)
+imageRouter.post("/create", imageController.createImage)
+imageRouter.get("/all", imageController.getAllImages)
+imageRouter.get("/:id", imageController.getImageById)

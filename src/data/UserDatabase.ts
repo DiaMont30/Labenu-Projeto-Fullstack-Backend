@@ -15,9 +15,8 @@ export class UserDatabase extends BaseDatabase {
     );
   }
 
-  public createUser = async (user: UserDB): Promise<void> => {
+  public insertUser = async (user: UserDB): Promise<void> => {
     try {
-      console.log("entrei")
       await BaseDatabase.connection
       .insert({
         id: user.id,
@@ -37,7 +36,7 @@ export class UserDatabase extends BaseDatabase {
       const result = await BaseDatabase.connection
         .select("*")
         .from(UserDatabase.TABLE_NAME)
-        .where({ email });
+        .where({email});
 
       return UserDatabase.toUserModel(result[0]);
     } catch (error) {
