@@ -77,11 +77,14 @@ export class ImageDatabase extends BaseDatabase {
   public insertTag = async (name: string[]): Promise<void> => {
       try {
           for(let i=0; i<name.length; i++){
-              await BaseDatabase.connection
-              .insert({name: name[i]})
-              .into("tags_Labegram");
+              await BaseDatabase.connection.raw(`
+              INSERT INTO tags_Labegram (name) VALUES ("${name[i]}");
+              `)
+
+            //   .insert({name: name[i]})
+            //   .into("tags_Labegram");
           }
-          console.log(name)
+          console.log(name[0])
       } catch (error) {
         throw new Error(error.message || error.sqlMessage);
       }

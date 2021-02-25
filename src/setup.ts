@@ -30,7 +30,7 @@ class Setup extends BaseDatabase {
       await BaseDatabase.connection.raw(`
             CREATE TABLE IF NOT EXISTS tags_Labegram (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL
+            name VARCHAR(255) NOT NULL UNIQUE
             )
         `);
 
