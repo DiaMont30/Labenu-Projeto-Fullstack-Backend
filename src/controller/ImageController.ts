@@ -4,6 +4,7 @@ import {
   Image,
   ImageInputDTO,
   GetImgInputDTO,
+  TagInputDTO,
 } from "../business/entities/Image";
 import { Authenticator } from "../business/services/Authenticator";
 import { IdGenerator } from "../business/services/IdGenerator";
@@ -22,9 +23,10 @@ export class ImageController {
 
       const input: ImageInputDTO = {
         subtitle: req.body.subtitle,
+        author_id: req.body.author_id,
         file: req.body.file,
-        tags: req.body.tags,
         collection: req.body.collection,
+        tags: req.body.tags,
         token: token,
       };
 
@@ -49,7 +51,7 @@ export class ImageController {
 
       const image = await imageBusiness.getImage(result);
 
-      res.status(200).send({ message: "Success!", image });
+      res.status(200).send({ image });
     } catch (error) {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
@@ -66,4 +68,20 @@ export class ImageController {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
   };
+
+  public createTag = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const newTag: TagInputDTO ={
+        name: req.body,
+        token:  req.headers.authorization as string
+      }
+        
+        const tags = await imageBusiness.createTag(newTag);
+        res.status(201).send(tags);
+
+    } catch (error) {
+      res.status(error.statusCode || 400).send({ error: error.message });
+    }
+  };
+
 }
