@@ -47,46 +47,64 @@ export class ImageDatabase extends BaseDatabase {
     }
   };
 
-  public selectImage = async (id: string): Promise<Image[]> => {
+  public selectImage = async (id: string): Promise<any> => {
     try {
-      const result = await BaseDatabase.connection.raw(`
-        SELECT il.id as id, subtitle, author_id, date, file, collection, name as tags FROM ${ImageDatabase.TABLE_NAME} il
-        LEFT JOIN image_tags_Labegram itl ON il.id = itl.image_id
-        LEFT JOIN tags_Labegram tl ON tl.id = itl.tag_id
-        WHERE image_id = "${id}"
-    `);
-      return result[0];
+      const result = await BaseDatabase.connection
+        .select("*")
+        .from(ImageDatabase.TABLE_NAME)
+        .where("id", id);
+
+      for (let i = 0; i < result.length; i++) {
+        const tags = await BaseDatabase.connection.raw(`
+        SELECT name as tag FROM tags_Labegram tl
+        LEFT JOIN image_tags_Labegram itl ON tl.id = itl.tag_id
+        JOIN ${ImageDatabase.TABLE_NAME} il ON il.id = itl.image_id 
+        WHERE il.id = "${id}";
+        `);
+        const tagMap = tags[0].map((tag: any) => {
+          return tag.tag;
+        });
+        result[i].tags = tagMap;
+      }
+      return { data: result[0] };
     } catch (error) {
       throw new CustomError(error.statusCode, error.sqlMessage);
     }
   };
 
-  public selectAllImages = async (): Promise<Image[]> => {
+  public selectAllImages = async (): Promise<any> => {
     try {
-      const result = await BaseDatabase.connection.raw(`
-        SELECT il.id as id, subtitle, author_id, date, file, collection, name as tag FROM ${ImageDatabase.TABLE_NAME} il
-        LEFT JOIN image_tags_Labegram itl ON il.id = itl.image_id
-        JOIN tags_Labegram tl ON tl.id = itl.tag_id;
-      `)
-      return result[0];
+      const result = await BaseDatabase.connection
+        .select("*")
+        .from(ImageDatabase.TABLE_NAME);
+
+      for (let i = 0; i < result.length; i++) {
+        const tags = await BaseDatabase.connection.raw(`
+          SELECT name as tag FROM tags_Labegram tl
+          LEFT JOIN image_tags_Labegram itl ON tl.id = itl.tag_id
+          JOIN ${ImageDatabase.TABLE_NAME} il ON il.id = itl.image_id
+          WHERE il.id = "${result[i].id}";
+      `  );
+        const tagMap = tags[0].map((tag: any) => {
+          return tag.tag;
+        });
+        result[i].tags = tagMap;
+      }
+
+      return { result };
     } catch (error) {
       throw new Error(error.message || error.sqlMessage);
     }
   };
 
-  public insertTag = async (name: string[]): Promise<void> => {
-      try {
-          for(let i=0; i<name.length; i++){
-              await BaseDatabase.connection.raw(`
-              INSERT INTO tags_Labegram (name) VALUES ("${name[i]}");
-              `)
+  public insertTag = async (name: string): Promise<void> => {
+    try {
+      const result = await BaseDatabase.connection
+      .insert(name)
+      .into("tags_Labegram")
 
-            //   .insert({name: name[i]})
-            //   .into("tags_Labegram");
-          }
-          console.log(name[0])
-      } catch (error) {
-        throw new Error(error.message || error.sqlMessage);
-      }
-  }
+    } catch (error) {
+      throw new Error(error.message || error.sqlMessage);
+    }
+  };
 }

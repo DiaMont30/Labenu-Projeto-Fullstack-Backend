@@ -37,6 +37,6 @@ export interface GetImgInputDTO {
 }
 
 export interface TagInputDTO {
-  name: string[];
+  name: string;
   token: string;
 }
