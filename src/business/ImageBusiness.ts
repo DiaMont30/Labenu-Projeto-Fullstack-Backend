@@ -55,12 +55,15 @@ export class ImageBusiness {
 
   public getImage = async (input: GetImgInputDTO): Promise<Image[]> => {
     try {
+      const check = new CheckData();
+      check.checkExistenceProperty(input.token, "token");
+      check.checkExistenceProperty(input.id, "id");
+
       const result = await this.imageDatabase.selectImage(input.id);
       const tokenData: AuthenticationData = this.authenticator.getData(
         input.token
       );
 
-      const check = new CheckData();
       check.checkExistenceObject(result, "Image not found");
 
       return result;
