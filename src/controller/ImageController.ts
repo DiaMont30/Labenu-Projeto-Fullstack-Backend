@@ -59,11 +59,10 @@ export class ImageController {
 
   public getAllImages = async (req: Request, res: Response): Promise<void> => {
     try {
-        const token: string = req.headers.authorization as string;
-        const images = await imageBusiness.getAllImages(token);
+      const token: string = req.headers.authorization as string;
+      const images = await imageBusiness.getAllImages(token);
 
-        res.status(201).send({ images });
-
+      res.status(201).send({ images });
     } catch (error) {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
@@ -71,17 +70,14 @@ export class ImageController {
 
   public createTag = async (req: Request, res: Response): Promise<void> => {
     try {
-      const newTag: TagInputDTO ={
-        name: req.body,
-        token:  req.headers.authorization as string
-      }
-        
-        const tags = await imageBusiness.createTag(newTag);
-        res.status(201).send(tags);
-
+      const newTag: TagInputDTO = {
+        name: req.body.name,
+        token: req.headers.authorization as string,
+      };
+      const tags = await imageBusiness.createTag(newTag);
+      res.status(201).send({tags: tags});
     } catch (error) {
       res.status(error.statusCode || 400).send({ error: error.message });
     }
   };
-
 }

@@ -97,12 +97,13 @@ export class ImageDatabase extends BaseDatabase {
     }
   };
 
-  public insertTag = async (name: string): Promise<void> => {
+  public insertTag = async (name: string): Promise<any> => {
     try {
       const result = await BaseDatabase.connection
-      .insert(name)
+      .insert({name: name})
       .into("tags_Labegram")
 
+      return name
     } catch (error) {
       throw new Error(error.message || error.sqlMessage);
     }
