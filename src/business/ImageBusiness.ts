@@ -86,15 +86,16 @@ export class ImageBusiness {
 
   public createTag = async (input: TagInputDTO): Promise<any> => {
     try {
-      const tokenData: AuthenticationData = this.authenticator.getData(input.token);
-
       const check = new CheckData();
       check.checkExistenceProperty(input.name, "name");
       check.checkExistenceProperty(input.token, "token");
-      
-      const tags = await this.imageDatabase.insertTag(input.name)
 
-      return(tags)
+      const tokenData: AuthenticationData = this.authenticator.getData(
+        input.token
+      );
+      const tags = await this.imageDatabase.insertTag(input.name);
+
+      return tags;
     } catch (error) {
       throw new CustomError(error.statusCode, error.message);
     }

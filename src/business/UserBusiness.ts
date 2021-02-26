@@ -48,24 +48,22 @@ export class UserBusiness {
 
    public async getUserByEmail(user: LoginInputDTO) {
       try {
-         const userFromDB = await this.userDatabase.selectUserByEmail(user.email)
          const check = new CheckData();
-
          check.checkPasswordFormat(user.password);
          check.checkEmailFormat(user.email);
-         check.checkExistenceObject(userFromDB, "Invalid credentials");
 
+         const userFromDB = await this.userDatabase.selectUserByEmail(user.email)
+         check.checkExistenceObject(userFromDB, "Invalid credentials");
 
          const passwordIsCorrect = await this.hashManager.compare(
             user.password,
             userFromDB.password
          )
+         check.checkExistenceObject(passwordIsCorrect, "Invalid credentials");
 
          const accessToken = this.authenticator.generateToken({
             id: userFromDB.id
          })
-
-         check.checkExistenceObject(passwordIsCorrect, "Invalid credentials");
 
          return accessToken
 

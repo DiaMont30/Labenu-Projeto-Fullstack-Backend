@@ -18,7 +18,7 @@ export class CheckData {
   };
 
   public checkExistenceProperty = (reqPropety: any, propretyName: string) => {
-    if (!reqPropety || reqPropety === undefined) {
+    if (!reqPropety || reqPropety === undefined || reqPropety === "") {
       throw new CustomError(406, `'${propretyName}' property is missing`);
     }
   };
