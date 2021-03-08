@@ -62,7 +62,7 @@ export class ImageController {
       const token: string = req.headers.authorization as string;
       const images = await imageBusiness.getAllImages(token);
 
-      res.status(201).send({ images });
+      res.status(201).send(images);
     } catch (error) {
       res.status(error.statusCode || 400).send({ error: error.message });
     }

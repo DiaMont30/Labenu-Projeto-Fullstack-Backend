@@ -9,6 +9,7 @@ import {
   ImageInputDTO,
   GetImgInputDTO,
   TagInputDTO,
+  ImageOutputDTO,
 } from "./entities/Image";
 import { CheckData } from "./error/CheckData";
 import dayjs from "dayjs";
@@ -53,20 +54,30 @@ export class ImageBusiness {
     }
   };
 
-  public getImage = async (input: GetImgInputDTO): Promise<Image[]> => {
+  public getImage = async (input: GetImgInputDTO): Promise<any> => {
     try {
       const check = new CheckData();
       check.checkExistenceProperty(input.token, "token");
       check.checkExistenceProperty(input.id, "id");
 
-      const result = await this.imageDatabase.selectImage(input.id);
+      const image = await this.imageDatabase.selectImage(input.id);
       const tokenData: AuthenticationData = this.authenticator.getData(
         input.token
       );
 
-      check.checkExistenceObject(result, "Image not found");
+      check.checkExistenceObject(image, "Image not found");
+    
+      const result: ImageOutputDTO = {
+        id: image.data.id,
+        subtitle: image.data.subtitle,
+        author_id: image.data.author_id,
+        date: dayjs(image.data.date).format("DD/MM/YYYY"),
+        file: image.data.file,
+        collection: image.data.collection,
+        tags: image.data.tags
+      }
 
-      return result;
+      return(result);
     } catch (error) {
       throw new CustomError(error.statusCode, error.message);
     }

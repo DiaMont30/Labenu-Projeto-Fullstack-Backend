@@ -24,7 +24,7 @@ export class UserController {
       };
 
       const token = await userBusiness.createUser(input);
-
+      console.log(input)
       res.status(200).send({ token });
     } catch (error) {
       res.status(error.statusCode || 400).send({ error: error.message });
@@ -39,7 +39,6 @@ export class UserController {
       };
 
       const token = await userBusiness.getUserByEmail(loginData);
-      console.log(loginData)
       res.status(200).send({ token });
     } catch (error) {
       res.status(error.statusCode || 400).send({ error: error.message });

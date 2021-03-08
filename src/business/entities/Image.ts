@@ -31,6 +31,16 @@ export interface ImageInputDTO {
   token: string;
 }
 
+export interface ImageOutputDTO {
+  id: string;
+  subtitle: string;
+  author_id: string;
+  date: string;
+  file: string;
+  collection: string;
+  tags: string[];
+}
+
 export interface GetImgInputDTO {
   id: string;
   token: string;
